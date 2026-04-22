@@ -108,9 +108,10 @@ def _section_blocks(
 
     if items:
         shown = items[:MAX_ITEMS_PER_SECTION]
-        for it in shown:
+        for idx, it in enumerate(shown, start=1):
+            text = f"{idx}) " + formatter(it)
             blocks.append(
-                {"type": "section", "text": {"type": "mrkdwn", "text": formatter(it)}}
+                {"type": "section", "text": {"type": "mrkdwn", "text": text}}
             )
         if len(items) > MAX_ITEMS_PER_SECTION:
             blocks.append(
