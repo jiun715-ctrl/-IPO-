@@ -283,8 +283,8 @@ def classify_sections(
         elif next_first <= end <= next_last:
             next_month.append(it)
 
-    # 전월 완료: 종료 최신순 (end desc)
-    last_month.sort(key=lambda x: x.end_date or "", reverse=True)
+    # 전월 완료: 시작 빠른순 (start asc) — 당월/익월과 통일
+    last_month.sort(key=lambda x: x.start_date or "")
     # 당월/익월: 시작 빠른순 (start asc)
     this_month.sort(key=lambda x: x.start_date or "")
     next_month.sort(key=lambda x: x.start_date or "")
