@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
@@ -12,50 +12,74 @@ from slack_sdk.errors import SlackApiError
 from scraper import IpoItem
 
 
-MAX_ITEMS_PER_SECTION = 15  # 섹션당 최대 표시 건수 (Slack 메시지 길이 안전장치)
+# 섹션당 최대 표시 건수. 각 종목을 별도 block으로 렌더링하므로
+# 전체 block 수가 Slack 상한(50)을 넘지 않도록 여유있게 잡음.
+MAX_ITEMS_PER_SECTION = 10
 
 
-def _format_ongoing_line(it: IpoItem) -> str:
-    """공모중·최근마감: 6컬럼 모두."""
-    parts = [
-        f"<{it.detail_url}|*{it.name}*>",
-        f"`{it.schedule}`",
-        f"확정 {it.fixed_price}",
-        f"희망 {it.desired_price}",
+def _format_item_full(it: IpoItem) -> str:
+    """공모중·최근마감: 6컬럼 모두 세로 나열 (하이픈 구분)."""
+    comp = it.competition if it.competition else "-"
+    return (
+        f"*<{it.detail_url}|{it.name}>*\n"
+        f"\n"
+        f"- 공모주 일정 : {it.schedule}\n"
+        f"- 확정 공모가 : {it.fixed_price}\n"
+        f"- 희망 공모가 : {it.desired_price}\n"
+        f"- 청약 경쟁률 : {comp}\n"
+        f"- 주간사 : {it.underwriter}"
+    )
+
+
+def _format_item_upcoming(it: IpoItem) -> str:
+    """공모예정: 4컬럼만 세로 나열."""
+    return (
+        f"*<{it.detail_url}|{it.name}>*\n"
+        f"\n"
+        f"- 공모주 일정 : {it.schedule}\n"
+        f"- 희망 공모가 : {it.desired_price}\n"
+        f"- 주간사 : {it.underwriter}"
+    )
+
+
+def _section_blocks(
+    title: str,
+    emoji: str,
+    items: list[IpoItem],
+    formatter: Callable[[IpoItem], str],
+) -> list[dict]:
+    """
+    한 섹션의 Block Kit blocks 반환.
+    비어있어도 '(0건)' 헤더는 항상 표시.
+    종목 간에는 빈 block(divider) 없이 개별 section block 사이의
+    자연스러운 여백으로 구분.
+    """
+    header_text = f"{emoji} *{title}* ({len(items)}건)"
+    blocks: list[dict] = [
+        {"type": "section", "text": {"type": "mrkdwn", "text": header_text}},
     ]
-    if it.competition:
-        parts.append(f"경쟁률 {it.competition}")
-    parts.append(f"주간사 {it.underwriter}")
-    return " · ".join(parts)
 
+    if items:
+        shown = items[:MAX_ITEMS_PER_SECTION]
+        for it in shown:
+            blocks.append(
+                {"type": "section", "text": {"type": "mrkdwn", "text": formatter(it)}}
+            )
+        if len(items) > MAX_ITEMS_PER_SECTION:
+            blocks.append(
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": f"_...외 {len(items) - MAX_ITEMS_PER_SECTION}건_",
+                        }
+                    ],
+                }
+            )
 
-def _format_upcoming_line(it: IpoItem) -> str:
-    """공모예정: 4컬럼만."""
-    parts = [
-        f"<{it.detail_url}|*{it.name}*>",
-        f"`{it.schedule}`",
-        f"희망 {it.desired_price}",
-        f"주간사 {it.underwriter}",
-    ]
-    return " · ".join(parts)
-
-
-def _section_blocks(title: str, emoji: str, items: list[IpoItem], formatter) -> list[dict]:
-    """한 섹션에 해당하는 Block Kit blocks 반환. 빈 리스트면 []."""
-    if not items:
-        return []
-    header = f"{emoji} *{title}* ({len(items)}건)"
-    shown = items[:MAX_ITEMS_PER_SECTION]
-    lines = [formatter(it) for it in shown]
-    body = "\n".join(f"• {line}" for line in lines)
-    if len(items) > MAX_ITEMS_PER_SECTION:
-        body += f"\n_...외 {len(items) - MAX_ITEMS_PER_SECTION}건_"
-
-    return [
-        {"type": "section", "text": {"type": "mrkdwn", "text": header}},
-        {"type": "section", "text": {"type": "mrkdwn", "text": body}},
-        {"type": "divider"},
-    ]
+    blocks.append({"type": "divider"})
+    return blocks
 
 
 def build_blocks(
@@ -68,13 +92,26 @@ def build_blocks(
     blocks: list[dict] = [
         {
             "type": "header",
-            "text": {"type": "plain_text", "text": f"📊 38커뮤니케이션 IPO 일정 ({run_date})"},
+            "text": {"type": "plain_text", "text": "경쟁사 IPO 일정"},
+        },
+        {
+            "type": "context",
+            "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": (
+                        f"_{run_date}_ · "
+                        "종목명을 클릭하실 경우 상세 페이지로 이동합니다. "
+                        "Slack 메시지는 전일과 내용이 바뀔 경우에만 게시됩니다."
+                    ),
+                }
+            ],
         },
         {"type": "divider"},
     ]
-    blocks += _section_blocks("현재 공모중인 상품", "🔥", ongoing, _format_ongoing_line)
-    blocks += _section_blocks("1주일 내 공모예정 상품", "📅", upcoming, _format_upcoming_line)
-    blocks += _section_blocks("최근 마감한 상품", "✅", recent_end, _format_ongoing_line)
+    blocks += _section_blocks("현재 공모중인 상품", "🔥", ongoing, _format_item_full)
+    blocks += _section_blocks("1주일 내 공모예정 상품", "📅", upcoming, _format_item_upcoming)
+    blocks += _section_blocks("최근 마감한 상품", "✅", recent_end, _format_item_full)
 
     blocks.append(
         {
@@ -82,7 +119,11 @@ def build_blocks(
             "elements": [
                 {
                     "type": "mrkdwn",
-                    "text": "출처: <https://www.38.co.kr/html/fund/index.htm?o=k|38커뮤니케이션> · 상세 데이터는 첨부 엑셀 참고",
+                    "text": (
+                        "출처: "
+                        "<https://www.38.co.kr/html/fund/index.htm?o=k|38커뮤니케이션>"
+                        " · 상세 데이터는 첨부 엑셀 참고"
+                    ),
                 }
             ],
         }
@@ -93,7 +134,7 @@ def build_blocks(
 def _fallback_text(ongoing, upcoming, recent_end, run_date: str) -> str:
     """알림 미리보기/접근성용 폴백."""
     return (
-        f"[38 IPO {run_date}] "
+        f"[경쟁사 IPO {run_date}] "
         f"공모중 {len(ongoing)}건 · 예정 {len(upcoming)}건 · 최근마감 {len(recent_end)}건"
     )
 
