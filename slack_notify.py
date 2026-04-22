@@ -11,6 +11,7 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
 from scraper import IpoItem
+from excel_writer import _split_underwriters
 
 
 # 섹션당 최대 표시 건수. 각 종목을 별도 block으로 렌더링하므로
@@ -18,6 +19,8 @@ from scraper import IpoItem
 MAX_ITEMS_PER_SECTION = 12
 
 _WEEKDAY_KO = ["월", "화", "수", "목", "금", "토", "일"]
+
+_OWN_FIRM = "NH투자증권"  # 섹션 요약에서 항상 맨 앞에 표시
 
 
 def _format_header_date(run_date: str) -> str:
@@ -32,6 +35,31 @@ def _format_header_date(run_date: str) -> str:
 def _yy_mm(year: int, month: int) -> str:
     """2026, 5 → \"'26년 5월\""""
     return f"'{year % 100:02d}년 {month}월"
+
+
+def _underwriter_summary(items: list[IpoItem]) -> str:
+    """
+    섹션 내 증권사별 주간 건수 요약.
+    - 한 종목에 주간사가 N개면 각 증권사에 1건씩 카운트 (엑셀 집계와 동일)
+    - NH투자증권을 항상 맨 앞에 (있을 경우)
+    - 그 뒤는 건수 desc → 증권사명 가나다순
+    - 섹션이 비어있으면 빈 문자열
+    """
+    counts: dict[str, int] = {}
+    for it in items:
+        for uw in _split_underwriters(it.underwriter):
+            counts[uw] = counts.get(uw, 0) + 1
+    if not counts:
+        return ""
+
+    others = [(k, v) for k, v in counts.items() if k != _OWN_FIRM]
+    others.sort(key=lambda x: (-x[1], x[0]))
+
+    parts: list[str] = []
+    if _OWN_FIRM in counts:
+        parts.append(f"{_OWN_FIRM}({counts[_OWN_FIRM]}건)")
+    parts.extend(f"{k}({v}건)" for k, v in others)
+    return ", ".join(parts)
 
 
 def _format_item_full(it: IpoItem) -> str:
@@ -66,9 +94,14 @@ def _section_blocks(
 ) -> list[dict]:
     """
     한 섹션의 Block Kit blocks 반환.
-    - 비어있어도 '(0건)' 헤더 + 안내 문구 한 줄 표시
+    - 비어있지 않으면 헤더 아래에 증권사별 요약 한 줄 추가
+    - 비어있으면 '(0건)' 헤더 + 안내 문구
     """
     header_text = f"{emoji} *{title}* ({len(items)}건)"
+    summary = _underwriter_summary(items)
+    if summary:
+        header_text += f"\n* {summary}"
+
     blocks: list[dict] = [
         {"type": "section", "text": {"type": "mrkdwn", "text": header_text}},
     ]
