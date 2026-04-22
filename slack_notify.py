@@ -248,3 +248,67 @@ def send(
     except SlackApiError as e:
         print(f"[WARN] Slack file upload failed: {e.response.get('error')}")
         raise
+
+
+def _format_schedule_compact(it: IpoItem) -> str:
+    """'2026.04.20~04.21' 또는 start/end date → '4/20~4/21' (한 자리면 한 자리)."""
+    try:
+        s = datetime.strptime(it.start_date, "%Y-%m-%d")
+        e = datetime.strptime(it.end_date, "%Y-%m-%d")
+        return f"{s.month}/{s.day}~{e.month}/{e.day}"
+    except (ValueError, TypeError, AttributeError):
+        return it.schedule
+
+
+def send_nh_dm(
+    this_month: list[IpoItem],
+    user_ids_csv: Optional[str] = None,
+    token: Optional[str] = None,
+) -> None:
+    """
+    당월 NH투자증권 주간 종목에 대해 지정된 유저들에게 개별 DM 발송.
+    - NH 종목 0건이면 미발송
+    - 대상 유저 목록이 비어있어도 미발송 (하위호환)
+    - 한 유저 발송 실패가 다른 유저 발송에 영향 주지 않도록 개별 try
+    """
+    if user_ids_csv is None:
+        user_ids_csv = os.environ.get("SLACK_NH_DM_USER_IDS", "")
+    user_ids = [u.strip() for u in user_ids_csv.split(",") if u.strip()]
+    if not user_ids:
+        print("  [DM SKIP] SLACK_NH_DM_USER_IDS 미설정 또는 비어있음")
+        return
+
+    nh_items = [
+        it for it in this_month
+        if _OWN_FIRM in _split_underwriters(it.underwriter)
+    ]
+    if not nh_items:
+        print("  [DM SKIP] 당월 NH투자증권 주간 종목 없음")
+        return
+
+    items_str = ", ".join(
+        f"{it.name}({_format_schedule_compact(it)})" for it in nh_items
+    )
+    n = len(nh_items)
+    text = (
+        f"이번달 NH투자증권 공모주는 총 {n}건으로, {items_str} 입니다.\n"
+        f"\n"
+        f"단기간 다수 예외 신청이 필요한 지 확인해보세요."
+    )
+
+    token = token or os.environ["SLACK_BOT_TOKEN"]
+    client = WebClient(token=token)
+
+    sent = 0
+    failed = []
+    for uid in user_ids:
+        try:
+            client.chat_postMessage(channel=uid, text=text)
+            sent += 1
+            print(f"  DM 발송 성공: {uid}")
+        except SlackApiError as e:
+            err = e.response.get("error", "unknown")
+            failed.append((uid, err))
+            print(f"  [WARN] DM 실패 ({uid}): {err}")
+
+    print(f"  DM 결과: 성공 {sent} / 실패 {len(failed)}")
