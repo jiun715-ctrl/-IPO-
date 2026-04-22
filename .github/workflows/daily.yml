@@ -3,7 +3,9 @@ name: Daily IPO Schedule
 on:
   schedule:
     # KST 08:00 = UTC 23:00 (전일)
-    - cron: '0 23 * * *'
+    # KST 월~금만 실행하려면 UTC 일~목에 돌려야 함 (day-of-week: 0=일, 1=월, ..., 4=목)
+    # 수동 실행(workflow_dispatch)은 요일 제약 없이 동작.
+    - cron: '0 23 * * 0-4'
   workflow_dispatch:  # 수동 실행용
 
 permissions:
