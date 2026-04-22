@@ -1,12 +1,9 @@
-name: Daily IPO Schedule
+name: Monthly IPO Schedule
 
 on:
-  schedule:
-    # KST 08:00 = UTC 23:00 (전일)
-    # KST 월~금만 실행하려면 UTC 일~목에 돌려야 함 (day-of-week: 0=일, 1=월, ..., 4=목)
-    # 수동 실행(workflow_dispatch)은 요일 제약 없이 동작.
-    - cron: '0 23 * * 0-4'
-  workflow_dispatch:  # 수동 실행용
+  # 월간 배치 — 외부 cron (cron-job.org) 으로 KST 매월 1일 08:00 트리거
+  # GitHub 내장 cron은 UTC 기준이라 월 경계 실수가 잦아서 사용하지 않음
+  workflow_dispatch:
 
 permissions:
   contents: write  # snapshot.json 커밋을 위해 필요
