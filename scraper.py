@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import re
+import ssl
 from dataclasses import dataclass, asdict
 from datetime import date, datetime
 from typing import Optional
@@ -17,6 +18,8 @@ from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
+from requests.adapters import HTTPAdapter
+from urllib3.util.ssl_ import create_urllib3_context
 
 BASE_URL = "https://www.38.co.kr"
 LIST_URL = f"{BASE_URL}/html/fund/index.htm"
@@ -33,6 +36,36 @@ HEADERS = {
     ),
     "Accept-Language": "ko-KR,ko;q=0.9",
 }
+
+
+class _LegacySSLAdapter(HTTPAdapter):
+    """
+    38.co.kr 같은 구 SSL 서버 대응.
+
+    OpenSSL 3.x(Ubuntu 24.04)의 기본 SECLEVEL=2는 legacy renegotiation을 거부해
+    SSLV3_ALERT_HANDSHAKE_FAILURE가 발생한다. SECLEVEL=0으로 낮추고
+    legacy 서버 호환 플래그를 켜서 연결 허용.
+    """
+
+    def init_poolmanager(self, *args, **kwargs):
+        ctx = create_urllib3_context()
+        ctx.set_ciphers("DEFAULT:@SECLEVEL=0")
+        ctx.options |= 0x4  # OP_LEGACY_SERVER_CONNECT
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        kwargs["ssl_context"] = ctx
+        return super().init_poolmanager(*args, **kwargs)
+
+
+def _build_session() -> requests.Session:
+    s = requests.Session()
+    s.mount("https://", _LegacySSLAdapter())
+    s.headers.update(HEADERS)
+    return s
+
+
+# 모듈 전역 세션 (legacy SSL 어댑터 부착)
+_SESSION = _build_session()
 
 
 @dataclass
@@ -57,7 +90,10 @@ class IpoItem:
 def _fetch_page(page: int) -> str:
     """한 페이지 HTML을 EUC-KR로 디코딩해 반환."""
     params = {"o": "k", "page": page}
-    resp = requests.get(LIST_URL, params=params, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+    # verify=False 는 _LegacySSLAdapter에서 이미 켜져있지만 urllib3 경고 억제용
+    import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    resp = _SESSION.get(LIST_URL, params=params, timeout=REQUEST_TIMEOUT, verify=False)
     resp.raise_for_status()
     # 사이트 인코딩은 EUC-KR. apparent_encoding은 가끔 틀리므로 고정.
     resp.encoding = "euc-kr"
