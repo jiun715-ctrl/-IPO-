@@ -32,6 +32,7 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_NH_DM_USER_IDS: ${{ secrets.SLACK_NH_DM_USER_IDS }}
         run: python main.py
 
       - name: Commit snapshot if changed
