@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from datetime import datetime
 from pathlib import Path
 from typing import Callable, Optional
 
@@ -16,13 +17,23 @@ from scraper import IpoItem
 # 전체 block 수가 Slack 상한(50)을 넘지 않도록 여유있게 잡음.
 MAX_ITEMS_PER_SECTION = 10
 
+_WEEKDAY_KO = ["월", "화", "수", "목", "금", "토", "일"]
+
+
+def _format_header_date(run_date: str) -> str:
+    """'2026-04-22' -> '2026-04-22(수)'"""
+    try:
+        dt = datetime.strptime(run_date, "%Y-%m-%d")
+        return f"{run_date}({_WEEKDAY_KO[dt.weekday()]})"
+    except ValueError:
+        return run_date
+
 
 def _format_item_full(it: IpoItem) -> str:
-    """공모중·최근마감: 6컬럼 모두 세로 나열 (하이픈 구분)."""
+    """공모중·최근마감: 6컬럼 모두 세로 나열."""
     comp = it.competition if it.competition else "-"
     return (
         f"*<{it.detail_url}|{it.name}>*\n"
-        f"\n"
         f"- 공모주 일정 : {it.schedule}\n"
         f"- 확정 공모가 : {it.fixed_price}\n"
         f"- 희망 공모가 : {it.desired_price}\n"
@@ -35,7 +46,6 @@ def _format_item_upcoming(it: IpoItem) -> str:
     """공모예정: 4컬럼만 세로 나열."""
     return (
         f"*<{it.detail_url}|{it.name}>*\n"
-        f"\n"
         f"- 공모주 일정 : {it.schedule}\n"
         f"- 희망 공모가 : {it.desired_price}\n"
         f"- 주간사 : {it.underwriter}"
@@ -89,10 +99,11 @@ def build_blocks(
     run_date: str,
 ) -> list[dict]:
     """세 섹션 합쳐 Block Kit 리스트 생성."""
+    title = f"경쟁사 IPO 일정 ({_format_header_date(run_date)})"
     blocks: list[dict] = [
         {
             "type": "header",
-            "text": {"type": "plain_text", "text": "경쟁사 IPO 일정"},
+            "text": {"type": "plain_text", "text": title},
         },
         {
             "type": "context",
@@ -100,7 +111,6 @@ def build_blocks(
                 {
                     "type": "mrkdwn",
                     "text": (
-                        f"_{run_date}_ · "
                         "종목명을 클릭하실 경우 상세 페이지로 이동합니다. "
                         "Slack 메시지는 전일과 내용이 바뀔 경우에만 게시됩니다."
                     ),
