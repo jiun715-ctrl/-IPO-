@@ -109,7 +109,7 @@ def main() -> int:
     write_excel(items, excel_path, target_years=target_years)
     print(f"  엑셀 저장: {excel_path} ({excel_path.stat().st_size:,} bytes)")
 
-    # --- 슬랙 발송 ---
+    # --- 슬랙 발송 (메인 채널) ---
     slack_notify.send(
         last_month=last_m,
         this_month=this_m,
@@ -119,6 +119,12 @@ def main() -> int:
         labels=labels,
     )
     print("  슬랙 발송 완료")
+
+    # --- NH DM 발송 (실패해도 스냅샷 갱신·종료는 진행) ---
+    try:
+        slack_notify.send_nh_dm(this_month=this_m)
+    except Exception as e:
+        print(f"  [WARN] NH DM 중 예외: {e}")
 
     # --- 스냅샷 업데이트 ---
     _write_snapshot(today_payload)
