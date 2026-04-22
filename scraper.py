@@ -24,8 +24,8 @@ from urllib3.util.ssl_ import create_urllib3_context
 BASE_URL = "https://www.38.co.kr"
 LIST_URL = f"{BASE_URL}/html/fund/index.htm"
 
-# 페이지당 약 30건 × 10페이지 = 최근 3년치 커버
-MAX_PAGES = 10
+# 페이지당 약 30건 × 15페이지 = 최근 3년치 커버 (2024년까지)
+MAX_PAGES = 15
 REQUEST_TIMEOUT = 15
 
 HEADERS = {
@@ -215,47 +215,84 @@ def fetch_all(max_pages: int = MAX_PAGES) -> list[IpoItem]:
 
 # ------------------------------ 섹션 분류 ------------------------------ #
 
+def month_range(year: int, month: int) -> tuple[date, date]:
+    """해당 (year, month)의 1일과 말일 반환."""
+    first = date(year, month, 1)
+    if month == 12:
+        next_first = date(year + 1, 1, 1)
+    else:
+        next_first = date(year, month + 1, 1)
+    last = date.fromordinal(next_first.toordinal() - 1)
+    return first, last
+
+
+def month_labels(base: date) -> dict[str, tuple[int, int]]:
+    """
+    배치 기준일로 전월/당월/익월의 (연, 월)을 반환.
+    예: base=2026-05-01 → last=(2026,4), this=(2026,5), next=(2026,6)
+    """
+    y, m = base.year, base.month
+    # 당월
+    this_m = (y, m)
+    # 전월
+    if m == 1:
+        last_m = (y - 1, 12)
+    else:
+        last_m = (y, m - 1)
+    # 익월
+    if m == 12:
+        next_m = (y + 1, 1)
+    else:
+        next_m = (y, m + 1)
+    return {"last": last_m, "this": this_m, "next": next_m}
+
+
 def classify_sections(
     items: list[IpoItem],
     today: Optional[date] = None,
 ) -> dict[str, list[IpoItem]]:
     """
-    3개 섹션으로 분류:
-      - ongoing     : start_date <= today <= end_date
-      - upcoming    : today < start_date <= today + 7d
-      - recent_end  : today - 7d <= end_date < today
+    배치일 기준 전월/당월/익월 3개 섹션으로 분류.
+    모두 '공모주일정의 종료일'이 속한 달을 기준으로 판정.
+
+    - last_month : end_date ∈ [전월 1일, 전월 말일]   → 전월 공모 완료 내역
+    - this_month : end_date ∈ [당월 1일, 당월 말일]   → 당월 공모 예정/진행/완료
+    - next_month : end_date ∈ [익월 1일, 익월 말일]   → 익월 공모 예정
     """
     if today is None:
         today = date.today()
 
-    ongoing: list[IpoItem] = []
-    upcoming: list[IpoItem] = []
-    recent_end: list[IpoItem] = []
+    labels = month_labels(today)
+    last_first, last_last = month_range(*labels["last"])
+    this_first, this_last = month_range(*labels["this"])
+    next_first, next_last = month_range(*labels["next"])
+
+    last_month: list[IpoItem] = []
+    this_month: list[IpoItem] = []
+    next_month: list[IpoItem] = []
 
     for it in items:
-        if not it.start_date or not it.end_date:
+        if not it.end_date:
             continue
-        start = datetime.strptime(it.start_date, "%Y-%m-%d").date()
         end = datetime.strptime(it.end_date, "%Y-%m-%d").date()
 
-        if start <= today <= end:
-            ongoing.append(it)
-        elif today < start <= today.fromordinal(today.toordinal() + 7):
-            upcoming.append(it)
-        elif today.fromordinal(today.toordinal() - 7) <= end < today:
-            recent_end.append(it)
+        if last_first <= end <= last_last:
+            last_month.append(it)
+        elif this_first <= end <= this_last:
+            this_month.append(it)
+        elif next_first <= end <= next_last:
+            next_month.append(it)
 
-    # 공모중: 마감 임박순 (end asc)
-    ongoing.sort(key=lambda x: x.end_date or "")
-    # 예정: 시작 빠른순 (start asc)
-    upcoming.sort(key=lambda x: x.start_date or "")
-    # 최근 마감: 최근 마감순 (end desc)
-    recent_end.sort(key=lambda x: x.end_date or "", reverse=True)
+    # 전월 완료: 종료 최신순 (end desc)
+    last_month.sort(key=lambda x: x.end_date or "", reverse=True)
+    # 당월/익월: 시작 빠른순 (start asc)
+    this_month.sort(key=lambda x: x.start_date or "")
+    next_month.sort(key=lambda x: x.start_date or "")
 
     return {
-        "ongoing": ongoing,
-        "upcoming": upcoming,
-        "recent_end": recent_end,
+        "last_month": last_month,
+        "this_month": this_month,
+        "next_month": next_month,
     }
 
 
