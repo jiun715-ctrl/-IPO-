@@ -139,28 +139,20 @@
       "underwriter": "미래에셋증권,현대차증권"
     },
     {
-      "name": "스트라드비젼",
-      "schedule": "2026.05.11~05.12",
-      "fixed_price": "-",
-      "desired_price": "12,400~14,800",
-      "competition": "",
-      "underwriter": "KB증권"
-    },
-    {
-      "name": "대신밸런스스팩20호",
-      "schedule": "2026.05.12~05.13",
-      "fixed_price": "-",
-      "desired_price": "2,000~2,000",
-      "competition": "",
-      "underwriter": "대신증권"
-    },
-    {
       "name": "피스피스스튜디오",
       "schedule": "2026.05.20~05.21",
       "fixed_price": "-",
       "desired_price": "19,000~21,500",
       "competition": "",
       "underwriter": "NH투자증권,미래에셋증권"
+    },
+    {
+      "name": "대신밸런스스팩20호",
+      "schedule": "2026.05.22~05.26",
+      "fixed_price": "-",
+      "desired_price": "2,000~2,000",
+      "competition": "",
+      "underwriter": "대신증권"
     }
   ]
 }
