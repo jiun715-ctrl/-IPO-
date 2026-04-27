@@ -23,6 +23,7 @@ from pathlib import Path
 
 from scraper import IpoItem, fetch_all, classify_sections, month_labels
 from excel_writer import write_excel
+from diff import diff_summary, format_diff_text
 import slack_notify
 
 
@@ -99,6 +100,14 @@ def main() -> int:
         print("[SKIP] 전회 스냅샷과 동일 → 슬랙·엑셀 미발송")
         return 0
 
+    # --- 변동사항 요약 (전월 섹션 위에 표시할 안내문) ---
+    summary = diff_summary(prev_payload, today_payload)
+    diff_text = format_diff_text(summary)
+    if diff_text:
+        print(f"  변동사항: {summary['kind']} / {summary['counts']}")
+    else:
+        print(f"  변동사항: {summary['kind']} (안내문 생략)")
+
     # --- 엑셀 생성: 최근 3년 증권사별 집계 ---
     target_years = [today.year - i for i in range(YEARS_WINDOW - 1, -1, -1)]
     # 오름차순으로 만들어두지만 엑셀 내부에서는 desc로 정렬됨
@@ -117,6 +126,7 @@ def main() -> int:
         excel_path=excel_path,
         run_date=run_date,
         labels=labels,
+        diff_text=diff_text,
     )
     print("  슬랙 발송 완료")
 
