@@ -143,6 +143,7 @@ def build_blocks(
     next_month: list[IpoItem],
     run_date: str,
     labels: dict[str, tuple[int, int]],
+    diff_text: Optional[str] = None,
 ) -> list[dict]:
     """세 섹션 합쳐 Block Kit 리스트 생성."""
     title = f"경쟁사 IPO 일정 ({_format_header_date(run_date)})"
@@ -174,6 +175,14 @@ def build_blocks(
         },
         {"type": "divider"},
     ]
+
+    # 변동사항 안내 (전월 섹션 바로 위)
+    if diff_text:
+        blocks.append(
+            {"type": "section", "text": {"type": "mrkdwn", "text": diff_text}}
+        )
+        blocks.append({"type": "divider"})
+
     blocks += _section_blocks(
         last_label, "✅", last_month, _format_item_full,
         empty_text="전월 공모 완료 내역이 없습니다.",
@@ -220,6 +229,7 @@ def send(
     excel_path: Path,
     run_date: str,
     labels: dict[str, tuple[int, int]],
+    diff_text: Optional[str] = None,
     token: Optional[str] = None,
     channel: Optional[str] = None,
 ) -> None:
@@ -228,7 +238,9 @@ def send(
     channel = channel or os.environ["SLACK_CHANNEL_ID"]
 
     client = WebClient(token=token)
-    blocks = build_blocks(last_month, this_month, next_month, run_date, labels)
+    blocks = build_blocks(
+        last_month, this_month, next_month, run_date, labels, diff_text=diff_text
+    )
     fallback = _fallback_text(last_month, this_month, next_month, run_date)
 
     # 1) 본 메시지
