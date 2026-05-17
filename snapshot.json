@@ -59,9 +59,9 @@
     {
       "name": "마키나락스",
       "schedule": "2026.05.11~05.12",
-      "fixed_price": "-",
+      "fixed_price": "15,000",
       "desired_price": "12,500~15,000",
-      "competition": "",
+      "competition": "2807.8:1",
       "underwriter": "미래에셋증권,현대차증권"
     },
     {
@@ -82,14 +82,6 @@
     }
   ],
   "next_month": [
-    {
-      "name": "져스텍",
-      "schedule": "2026.05.29~06.01",
-      "fixed_price": "-",
-      "desired_price": "10,500~12,500",
-      "competition": "",
-      "underwriter": "삼성증권"
-    },
     {
       "name": "매드업",
       "schedule": "2026.06.01~06.02",
@@ -113,6 +105,14 @@
       "desired_price": "2,000~2,000",
       "competition": "",
       "underwriter": "메리츠증권"
+    },
+    {
+      "name": "져스텍",
+      "schedule": "2026.06.11~06.12",
+      "fixed_price": "-",
+      "desired_price": "10,500~12,500",
+      "competition": "정정신고서 제출 요구",
+      "underwriter": "삼성증권"
     },
     {
       "name": "스트라드비젼",
