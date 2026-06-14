@@ -51,9 +51,9 @@
     {
       "name": "메리츠스팩2호",
       "schedule": "2026.06.09~06.10",
-      "fixed_price": "-",
+      "fixed_price": "2,000",
       "desired_price": "2,000~2,000",
-      "competition": "",
+      "competition": "1388.66:1",
       "underwriter": "메리츠증권"
     },
     {
@@ -113,6 +113,22 @@
       "desired_price": "17,800~20,700",
       "competition": "",
       "underwriter": "KB증권"
+    },
+    {
+      "name": "인제니아테라퓨틱스",
+      "schedule": "2026.07.23~07.24",
+      "fixed_price": "-",
+      "desired_price": "12,000~14,500",
+      "competition": "",
+      "underwriter": "삼성증권"
+    },
+    {
+      "name": "케이앤에스아이앤씨",
+      "schedule": "2026.07.27~07.28",
+      "fixed_price": "-",
+      "desired_price": "9,000~9,000",
+      "competition": "",
+      "underwriter": "IBK투자증권"
     }
   ]
 }
