@@ -2,52 +2,18 @@
   "labels": {
     "last": [
       2026,
-      5
+      6
     ],
     "this": [
       2026,
-      6
+      7
     ],
     "next": [
       2026,
-      7
+      8
     ]
   },
   "last_month": [
-    {
-      "name": "폴레드",
-      "schedule": "2026.05.04~05.06",
-      "fixed_price": "5,000",
-      "desired_price": "4,100~5,000",
-      "competition": "3169.86:1",
-      "underwriter": "NH투자증권"
-    },
-    {
-      "name": "마키나락스",
-      "schedule": "2026.05.11~05.12",
-      "fixed_price": "15,000",
-      "desired_price": "12,500~15,000",
-      "competition": "2807.8:1",
-      "underwriter": "미래에셋증권,현대차증권"
-    },
-    {
-      "name": "대신밸런스스팩20호",
-      "schedule": "2026.05.22~05.26",
-      "fixed_price": "2,000",
-      "desired_price": "2,000~2,000",
-      "competition": "1468.88:1",
-      "underwriter": "대신증권"
-    },
-    {
-      "name": "피스피스스튜디오",
-      "schedule": "2026.05.26~05.27",
-      "fixed_price": "21,500",
-      "desired_price": "19,000~21,500",
-      "competition": "1194.94:1",
-      "underwriter": "NH투자증권,미래에셋증권"
-    }
-  ],
-  "this_month": [
     {
       "name": "메리츠스팩2호",
       "schedule": "2026.06.09~06.10",
@@ -71,14 +37,6 @@
       "desired_price": "10,500~12,500",
       "competition": "2,783.89:1",
       "underwriter": "삼성증권"
-    },
-    {
-      "name": "빅웨이브로보틱스",
-      "schedule": "2026.06.19~06.22",
-      "fixed_price": "-",
-      "desired_price": "22,000~27,000",
-      "competition": "정정신고서 제출 요구",
-      "underwriter": "유진투자증권,미래에셋증권"
     },
     {
       "name": "한국스팩16호",
@@ -105,13 +63,13 @@
       "underwriter": "KB증권"
     }
   ],
-  "next_month": [
+  "this_month": [
     {
       "name": "레메디",
       "schedule": "2026.07.01~07.02",
       "fixed_price": "20,700",
       "desired_price": "17,800~20,700",
-      "competition": "",
+      "competition": "1706.71:1",
       "underwriter": "KB증권"
     },
     {
@@ -135,8 +93,50 @@
       "schedule": "2026.07.27~07.28",
       "fixed_price": "-",
       "desired_price": "9,000~9,000",
-      "competition": "",
+      "competition": "정정신고서 제출 요구",
       "underwriter": "IBK투자증권"
+    }
+  ],
+  "next_month": [
+    {
+      "name": "딜리셔스",
+      "schedule": "2026.08.03~08.04",
+      "fixed_price": "-",
+      "desired_price": "5,000~7,000",
+      "competition": "",
+      "underwriter": "한국투자증권"
+    },
+    {
+      "name": "빅웨이브로보틱스",
+      "schedule": "2026.08.05~08.06",
+      "fixed_price": "-",
+      "desired_price": "20,000~24,000",
+      "competition": "",
+      "underwriter": "유진투자증권,미래에셋증권"
+    },
+    {
+      "name": "니어스랩",
+      "schedule": "2026.08.05~08.06",
+      "fixed_price": "-",
+      "desired_price": "30,000~41,200",
+      "competition": "",
+      "underwriter": "삼성증권"
+    },
+    {
+      "name": "해치텍",
+      "schedule": "2026.08.06~08.07",
+      "fixed_price": "-",
+      "desired_price": "23,000~28,000",
+      "competition": "",
+      "underwriter": "DB증권"
+    },
+    {
+      "name": "기도산업",
+      "schedule": "2026.08.11~08.12",
+      "fixed_price": "-",
+      "desired_price": "24,800~28,400",
+      "competition": "",
+      "underwriter": "미래에셋증권,삼성증권"
     }
   ]
 }
