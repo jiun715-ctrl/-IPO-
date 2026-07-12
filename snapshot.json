@@ -75,7 +75,7 @@
     {
       "name": "에이치엘지노믹스",
       "schedule": "2026.07.13~07.14",
-      "fixed_price": "-",
+      "fixed_price": "21,500",
       "desired_price": "18,500~21,500",
       "competition": "",
       "underwriter": "KB증권,IBK투자증권"
@@ -87,14 +87,6 @@
       "desired_price": "12,000~14,500",
       "competition": "",
       "underwriter": "삼성증권"
-    },
-    {
-      "name": "케이앤에스아이앤씨",
-      "schedule": "2026.07.27~07.28",
-      "fixed_price": "-",
-      "desired_price": "9,000~9,000",
-      "competition": "정정신고서 제출 요구",
-      "underwriter": "IBK투자증권"
     }
   ],
   "next_month": [
@@ -105,6 +97,14 @@
       "desired_price": "5,000~7,000",
       "competition": "",
       "underwriter": "한국투자증권"
+    },
+    {
+      "name": "케이앤에스아이앤씨",
+      "schedule": "2026.08.04~08.05",
+      "fixed_price": "-",
+      "desired_price": "9,000~9,000",
+      "competition": "",
+      "underwriter": "IBK투자증권"
     },
     {
       "name": "빅웨이브로보틱스",
@@ -137,6 +137,14 @@
       "desired_price": "24,800~28,400",
       "competition": "",
       "underwriter": "미래에셋증권,삼성증권"
+    },
+    {
+      "name": "스카이랩스",
+      "schedule": "2026.08.13~08.14",
+      "fixed_price": "-",
+      "desired_price": "13,000~16,000",
+      "competition": "",
+      "underwriter": "한국투자증권"
     }
   ]
 }
