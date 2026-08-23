@@ -123,6 +123,14 @@
       "underwriter": "KB증권"
     },
     {
+      "name": "한국스팩17호",
+      "schedule": "2026.09.10~09.11",
+      "fixed_price": "-",
+      "desired_price": "2,000~2,000",
+      "competition": "",
+      "underwriter": "한국투자증권"
+    },
+    {
       "name": "와이즈플래닛컴퍼니",
       "schedule": "2026.09.14~09.15",
       "fixed_price": "-",
@@ -132,7 +140,7 @@
     },
     {
       "name": "빅웨이브로보틱스",
-      "schedule": "2026.09.16~09.17",
+      "schedule": "2026.09.15~09.16",
       "fixed_price": "-",
       "desired_price": "20,000~24,000",
       "competition": "",
