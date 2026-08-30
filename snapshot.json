@@ -83,9 +83,9 @@
     {
       "name": "스카이랩스",
       "schedule": "2026.08.26~08.27",
-      "fixed_price": "-",
+      "fixed_price": "10,000",
       "desired_price": "13,000~16,000",
-      "competition": "",
+      "competition": "2.85:1",
       "underwriter": "한국투자증권"
     }
   ],
@@ -93,18 +93,10 @@
     {
       "name": "NH스팩34호",
       "schedule": "2026.09.01~09.02",
-      "fixed_price": "-",
+      "fixed_price": "2,000",
       "desired_price": "2,000~2,000",
       "competition": "",
       "underwriter": "NH투자증권"
-    },
-    {
-      "name": "브릴스",
-      "schedule": "2026.09.08~09.09",
-      "fixed_price": "-",
-      "desired_price": "16,500~19,500",
-      "competition": "",
-      "underwriter": "IBK투자증권"
     },
     {
       "name": "네오사피엔스",
@@ -161,6 +153,22 @@
       "desired_price": "13,000~15,000",
       "competition": "",
       "underwriter": "한국투자증권"
+    },
+    {
+      "name": "브릴스",
+      "schedule": "2026.09.17~09.18",
+      "fixed_price": "-",
+      "desired_price": "16,500~19,500",
+      "competition": "",
+      "underwriter": "IBK투자증권"
+    },
+    {
+      "name": "엘리스그룹",
+      "schedule": "2026.09.18~09.21",
+      "fixed_price": "-",
+      "desired_price": "70,400~90,500",
+      "competition": "",
+      "underwriter": "미래에셋증권,삼성증권"
     }
   ]
 }
