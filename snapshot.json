@@ -2,44 +2,18 @@
   "labels": {
     "last": [
       2026,
-      7
+      8
     ],
     "this": [
       2026,
-      8
+      9
     ],
     "next": [
       2026,
-      9
+      10
     ]
   },
   "last_month": [
-    {
-      "name": "레메디",
-      "schedule": "2026.07.01~07.02",
-      "fixed_price": "20,700",
-      "desired_price": "17,800~20,700",
-      "competition": "1706.71:1",
-      "underwriter": "KB증권"
-    },
-    {
-      "name": "에이치엘지노믹스",
-      "schedule": "2026.07.13~07.14",
-      "fixed_price": "21,500",
-      "desired_price": "18,500~21,500",
-      "competition": "666.78:1",
-      "underwriter": "KB증권,IBK투자증권"
-    },
-    {
-      "name": "인제니아테라퓨틱스",
-      "schedule": "2026.07.30~07.31",
-      "fixed_price": "12,000",
-      "desired_price": "12,000~14,500",
-      "competition": "3.09:1",
-      "underwriter": "삼성증권"
-    }
-  ],
-  "this_month": [
     {
       "name": "딜리셔스",
       "schedule": "2026.08.03~08.04",
@@ -89,13 +63,13 @@
       "underwriter": "한국투자증권"
     }
   ],
-  "next_month": [
+  "this_month": [
     {
       "name": "NH스팩34호",
       "schedule": "2026.09.01~09.02",
       "fixed_price": "2,000",
       "desired_price": "2,000~2,000",
-      "competition": "",
+      "competition": "356.99:1",
       "underwriter": "NH투자증권"
     },
     {
@@ -169,6 +143,64 @@
       "desired_price": "70,400~90,500",
       "competition": "",
       "underwriter": "미래에셋증권,삼성증권"
+    }
+  ],
+  "next_month": [
+    {
+      "name": "멜콘(구.에스앤에프솔루션)",
+      "schedule": "2026.10.01~10.02",
+      "fixed_price": "-",
+      "desired_price": "10,700~12,300",
+      "competition": "",
+      "underwriter": "대신증권"
+    },
+    {
+      "name": "진코스텍",
+      "schedule": "2026.10.02~10.06",
+      "fixed_price": "-",
+      "desired_price": "19,500~23,500",
+      "competition": "",
+      "underwriter": "하나증권"
+    },
+    {
+      "name": "엠비디",
+      "schedule": "2026.10.06~10.07",
+      "fixed_price": "-",
+      "desired_price": "9,400~11,500",
+      "competition": "",
+      "underwriter": "하나증권"
+    },
+    {
+      "name": "래블업",
+      "schedule": "2026.10.12~10.13",
+      "fixed_price": "-",
+      "desired_price": "20,000~23,000",
+      "competition": "",
+      "underwriter": "NH투자증권"
+    },
+    {
+      "name": "SK증권스팩14호",
+      "schedule": "2026.10.15~10.16",
+      "fixed_price": "-",
+      "desired_price": "2,000~2,000",
+      "competition": "",
+      "underwriter": "SK증권"
+    },
+    {
+      "name": "티앤이코리아",
+      "schedule": "2026.10.20~10.21",
+      "fixed_price": "-",
+      "desired_price": "12,600~15,300",
+      "competition": "",
+      "underwriter": "신한투자증권"
+    },
+    {
+      "name": "크리에이츠",
+      "schedule": "2026.10.20~10.21",
+      "fixed_price": "-",
+      "desired_price": "15,000~18,000",
+      "competition": "",
+      "underwriter": "삼성증권"
     }
   ]
 }
