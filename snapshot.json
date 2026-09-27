@@ -163,14 +163,6 @@
       "underwriter": "미래에셋증권,삼성증권"
     },
     {
-      "name": "래블업",
-      "schedule": "2026.10.12~10.13",
-      "fixed_price": "-",
-      "desired_price": "20,000~23,000",
-      "competition": "정정신고서 제출 요구",
-      "underwriter": "NH투자증권"
-    },
-    {
       "name": "엠에스바이오",
       "schedule": "2026.10.12~10.13",
       "fixed_price": "-",
@@ -235,12 +227,36 @@
       "underwriter": "미래에셋증권"
     },
     {
+      "name": "이에스티",
+      "schedule": "2026.10.22~10.23",
+      "fixed_price": "-",
+      "desired_price": "10,600~12,400",
+      "competition": "",
+      "underwriter": "대신증권"
+    },
+    {
+      "name": "영광(구.영광공작소)",
+      "schedule": "2026.10.22~10.23",
+      "fixed_price": "-",
+      "desired_price": "14,000~17,000",
+      "competition": "",
+      "underwriter": "한국투자증권"
+    },
+    {
       "name": "아이엠스팩1호",
       "schedule": "2026.10.26~10.27",
       "fixed_price": "-",
       "desired_price": "2,000~2,000",
       "competition": "",
       "underwriter": "아이엠증권"
+    },
+    {
+      "name": "에이엘로봇",
+      "schedule": "2026.10.26~10.27",
+      "fixed_price": "-",
+      "desired_price": "15,700~17,600",
+      "competition": "",
+      "underwriter": "대신증권"
     },
     {
       "name": "엠비디",
