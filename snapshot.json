@@ -2,68 +2,18 @@
   "labels": {
     "last": [
       2026,
-      8
+      9
     ],
     "this": [
       2026,
-      9
+      10
     ],
     "next": [
       2026,
-      10
+      11
     ]
   },
   "last_month": [
-    {
-      "name": "딜리셔스",
-      "schedule": "2026.08.03~08.04",
-      "fixed_price": "7,000",
-      "desired_price": "5,000~7,000",
-      "competition": "10.29:1",
-      "underwriter": "한국투자증권"
-    },
-    {
-      "name": "케이앤에스아이앤씨",
-      "schedule": "2026.08.04~08.05",
-      "fixed_price": "11,000",
-      "desired_price": "9,000~11,000",
-      "competition": "1079.55:1",
-      "underwriter": "IBK투자증권"
-    },
-    {
-      "name": "기도산업",
-      "schedule": "2026.08.11~08.12",
-      "fixed_price": "28,400",
-      "desired_price": "24,800~28,400",
-      "competition": "5.53:1",
-      "underwriter": "미래에셋증권,삼성증권"
-    },
-    {
-      "name": "니어스랩",
-      "schedule": "2026.08.12~08.13",
-      "fixed_price": "41,200",
-      "desired_price": "30,000~41,200",
-      "competition": "522.99:1",
-      "underwriter": "삼성증권"
-    },
-    {
-      "name": "해치텍",
-      "schedule": "2026.08.12~08.13",
-      "fixed_price": "23,000",
-      "desired_price": "23,000~28,000",
-      "competition": "25.73:1",
-      "underwriter": "DB증권"
-    },
-    {
-      "name": "스카이랩스",
-      "schedule": "2026.08.26~08.27",
-      "fixed_price": "10,000",
-      "desired_price": "13,000~16,000",
-      "competition": "2.85:1",
-      "underwriter": "한국투자증권"
-    }
-  ],
-  "this_month": [
     {
       "name": "NH스팩34호",
       "schedule": "2026.09.01~09.02",
@@ -137,19 +87,19 @@
       "underwriter": "IBK투자증권"
     }
   ],
-  "next_month": [
+  "this_month": [
     {
       "name": "멜콘(구.에스앤에프솔루션)",
       "schedule": "2026.10.01~10.02",
-      "fixed_price": "-",
+      "fixed_price": "12,300",
       "desired_price": "10,700~12,300",
-      "competition": "",
+      "competition": "1741.48:1",
       "underwriter": "대신증권"
     },
     {
       "name": "진코스텍",
       "schedule": "2026.10.02~10.06",
-      "fixed_price": "-",
+      "fixed_price": "23,500",
       "desired_price": "19,500~23,500",
       "competition": "",
       "underwriter": "하나증권"
@@ -227,6 +177,14 @@
       "underwriter": "미래에셋증권"
     },
     {
+      "name": "래블업",
+      "schedule": "2026.10.22~10.23",
+      "fixed_price": "-",
+      "desired_price": "19,000~22,000",
+      "competition": "",
+      "underwriter": "NH투자증권"
+    },
+    {
       "name": "이에스티",
       "schedule": "2026.10.22~10.23",
       "fixed_price": "-",
@@ -265,6 +223,56 @@
       "desired_price": "9,600~11,700",
       "competition": "",
       "underwriter": "하나증권"
+    }
+  ],
+  "next_month": [
+    {
+      "name": "바로팜",
+      "schedule": "2026.11.02~11.03",
+      "fixed_price": "-",
+      "desired_price": "16,400~20,200",
+      "competition": "",
+      "underwriter": "미래에셋증권"
+    },
+    {
+      "name": "동원파츠",
+      "schedule": "2026.11.02~11.03",
+      "fixed_price": "-",
+      "desired_price": "23,000~26,500",
+      "competition": "",
+      "underwriter": "삼성증권"
+    },
+    {
+      "name": "넥스아이",
+      "schedule": "2026.11.03~11.04",
+      "fixed_price": "-",
+      "desired_price": "10,500~13,000",
+      "competition": "",
+      "underwriter": "한국투자증권"
+    },
+    {
+      "name": "옵토닉스",
+      "schedule": "2026.11.05~11.06",
+      "fixed_price": "-",
+      "desired_price": "10,000~12,000",
+      "competition": "",
+      "underwriter": "한국투자증권"
+    },
+    {
+      "name": "하나에어로다이내믹스",
+      "schedule": "2026.11.10~11.11",
+      "fixed_price": "-",
+      "desired_price": "4,700~5,700",
+      "competition": "",
+      "underwriter": "IBK투자증권"
+    },
+    {
+      "name": "케이엠에프",
+      "schedule": "2026.11.24~11.25",
+      "fixed_price": "-",
+      "desired_price": "15,000~17,800",
+      "competition": "",
+      "underwriter": "IBK투자증권"
     }
   ]
 }
